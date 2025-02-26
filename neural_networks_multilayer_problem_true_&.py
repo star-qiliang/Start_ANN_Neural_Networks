@@ -39,32 +39,41 @@ def sigmoid_derivative(x):
 # XOR dataset
 # Each row is a sample with 2 features
 X = np.array([
-    [0, 0],
-    [0, 1],
-    [1, 0],
-    [1, 1]
+    [0, 0, 0],
+    [0, 0, 1],
+    [0, 1, 0],
+    [0, 1, 1],
+
+    [1, 0, 0],
+    [1, 0, 1],
+    [1, 1, 0],
+    [1, 1, 1]
 ])
 
 # True output or targets for the XOR problem
 y = np.array([
     [0],
-    [1],
-    [1],
-    [0]
+    [0],
+    [0],
+    [0],
+    [0],
+    [0],
+    [0],
+    [1]
 ])
 
 # Set a random seed for reproducibility
 np.random.seed(42)
 
 # Neural network parameters
-# input_neurons = 2      # Number of input features
-# hidden_neurons = 1     # Number of neurons in the hidden layer
-# output_neurons = 1     # Number of neurons in the output layer
-
-
-input_neurons = 2      # Number of input features
-hidden_neurons = 2     # Number of neurons in the hidden layer
+input_neurons = 3      # Number of input features
+hidden_neurons = 1     # Number of neurons in the hidden layer
 output_neurons = 1     # Number of neurons in the output layer
+
+
+# input_neurons = 3      # Number of input features
+# hidden_neurons = 2     # Number of neurons in the hidden layer
+# output_neurons = 1     # Number of neurons in the output layer
 
 # input_neurons = 2      # Number of input features
 # hidden_neurons = 10     # Number of neurons in the hidden layer
@@ -149,4 +158,5 @@ print("\nW_hidden:\n", W_hidden)
 print("\nb_hidden:\n", b_hidden)
 print("\nW_output:\n", W_output)
 print("\nb_output:\n", b_output)
+
 

@@ -57,14 +57,14 @@ y = np.array([
 np.random.seed(42)
 
 # Neural network parameters
-# input_neurons = 2      # Number of input features
-# hidden_neurons = 1     # Number of neurons in the hidden layer
-# output_neurons = 1     # Number of neurons in the output layer
-
-
 input_neurons = 2      # Number of input features
-hidden_neurons = 2     # Number of neurons in the hidden layer
+hidden_neurons = 1     # Number of neurons in the hidden layer
 output_neurons = 1     # Number of neurons in the output layer
+
+
+# input_neurons = 2      # Number of input features
+# hidden_neurons = 2     # Number of neurons in the hidden layer
+# output_neurons = 1     # Number of neurons in the output layer
 
 # input_neurons = 2      # Number of input features
 # hidden_neurons = 10     # Number of neurons in the hidden layer

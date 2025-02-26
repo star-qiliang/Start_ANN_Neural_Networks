@@ -47,10 +47,10 @@ X = np.array([
 
 # True output or targets for the XOR problem
 y = np.array([
+    [1],
     [0],
-    [1],
-    [1],
-    [0]
+    [0],
+    [1]
 ])
 
 # Set a random seed for reproducibility
