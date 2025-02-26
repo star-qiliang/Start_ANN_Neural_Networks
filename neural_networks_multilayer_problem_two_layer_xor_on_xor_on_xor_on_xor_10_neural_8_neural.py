@@ -131,14 +131,17 @@ y = np.array([
 
 # # Neural network parameters
 input_neurons = 5      # Number of input features
-hidden_neurons = 10     # Number of neurons in the hidden layer
+hidden1_neurons = 10   # Number of neurons in the first hidden layer
+hidden2_neurons = 8    # Number of neurons in the second hidden layer
 output_neurons = 1     # Number of neurons in the output layer
 
 
 # Initialize weights and biases with random values
-W_hidden = np.random.uniform(low=-1.0, high=1.0, size=(input_neurons, hidden_neurons))
-b_hidden = np.random.uniform(low=-1.0, high=1.0, size=(1, hidden_neurons))
-W_output = np.random.uniform(low=-1.0, high=1.0, size=(hidden_neurons, output_neurons))
+W_hidden1 = np.random.uniform(low=-1.0, high=1.0, size=(input_neurons, hidden1_neurons))
+b_hidden1 = np.random.uniform(low=-1.0, high=1.0, size=(1, hidden1_neurons))
+W_hidden2 = np.random.uniform(low=-1.0, high=1.0, size=(hidden1_neurons, hidden2_neurons))
+b_hidden2 = np.random.uniform(low=-1.0, high=1.0, size=(1, hidden2_neurons))
+W_output = np.random.uniform(low=-1.0, high=1.0, size=(hidden2_neurons, output_neurons))
 b_output = np.random.uniform(low=-1.0, high=1.0, size=(1, output_neurons))
 
 # Hyperparameters
@@ -159,12 +162,16 @@ epochs = 50000  # Number of training iterations
 # Training loop
 for epoch in range(epochs):
     # -------- Forward Propagation --------
-    # Compute input for hidden layer neurons
-    hidden_input = np.dot(X, W_hidden) + b_hidden
-    hidden_output = sigmoid(hidden_input)
+    # Compute input for first hidden layer
+    hidden1_input = np.dot(X, W_hidden1) + b_hidden1
+    hidden1_output = sigmoid(hidden1_input)
+    
+    # Compute input for second hidden layer
+    hidden2_input = np.dot(hidden1_output, W_hidden2) + b_hidden2
+    hidden2_output = sigmoid(hidden2_input)
     
     # Compute input for output neuron
-    final_input = np.dot(hidden_output, W_output) + b_output
+    final_input = np.dot(hidden2_output, W_output) + b_output
     predicted_output = sigmoid(final_input)
     
     # -------- Compute the Error --------
@@ -178,18 +185,26 @@ for epoch in range(epochs):
     # For the output layer, compute the delta/error term
     d_predicted_output = error * sigmoid_derivative(final_input)
     
-    # Propagate error back into the hidden layer
-    error_hidden_layer = d_predicted_output.dot(W_output.T)
-    d_hidden_layer = error_hidden_layer * sigmoid_derivative(hidden_input)
+    # Propagate error back into the second hidden layer
+    error_hidden2_layer = d_predicted_output.dot(W_output.T)
+    d_hidden2_layer = error_hidden2_layer * sigmoid_derivative(hidden2_input)
+    
+    # Propagate error back into the first hidden layer
+    error_hidden1_layer = d_hidden2_layer.dot(W_hidden2.T)
+    d_hidden1_layer = error_hidden1_layer * sigmoid_derivative(hidden1_input)
     
     # -------- Update Weights and Biases --------
     # Update for the output layer
-    W_output += learning_rate * hidden_output.T.dot(d_predicted_output)
+    W_output += learning_rate * hidden2_output.T.dot(d_predicted_output)
     b_output += learning_rate * np.sum(d_predicted_output, axis=0, keepdims=True)
     
-    # Update for the hidden layer
-    W_hidden += learning_rate * X.T.dot(d_hidden_layer)
-    b_hidden += learning_rate * np.sum(d_hidden_layer, axis=0, keepdims=True)
+    # Update for the second hidden layer
+    W_hidden2 += learning_rate * hidden1_output.T.dot(d_hidden2_layer)
+    b_hidden2 += learning_rate * np.sum(d_hidden2_layer, axis=0, keepdims=True)
+    
+    # Update for the first hidden layer
+    W_hidden1 += learning_rate * X.T.dot(d_hidden1_layer)
+    b_hidden1 += learning_rate * np.sum(d_hidden1_layer, axis=0, keepdims=True)
     
     # Optionally, print the error every 1000 epochs to monitor loss convergence
     if (epoch + 1) % 1000 == 0:
@@ -205,8 +220,10 @@ print((predicted_output > 0.5).astype(int))
 
 
 
-print("\nW_hidden:\n", W_hidden)
-print("\nb_hidden:\n", b_hidden)
+print("\nW_hidden1:\n", W_hidden1)
+print("\nb_hidden1:\n", b_hidden1)
+print("\nW_hidden2:\n", W_hidden2)
+print("\nb_hidden2:\n", b_hidden2)
 print("\nW_output:\n", W_output)
 print("\nb_output:\n", b_output)
 
